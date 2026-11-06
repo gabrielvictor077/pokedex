@@ -66,6 +66,26 @@ async function consultarApi(msg)
     {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${msg}`);
         const data = await response.json();
+        const respostaEspecie = await fetch(data.species.url);
+        const especie = await respostaEspecie.json();
+        console.log(especie.generation.name);
+        const regioes = {
+            'generation-i': 'Kanto',
+            'generation-ii': 'Johto',
+            'generation-iii': 'Hoenn',
+            'generation-iv': 'Sinnoh',
+            'generation-v': 'Unova',
+            'generation-vi': 'Kalos',
+            'generation-vii': 'Alola',
+            'generation-viii': 'Galar',
+            'generation-ix': 'Paldea'
+        };
+        const regiao = regioes[especie.generation.name];
+        const tipos = data.types.map(item => item.type.name).join(', ');
+        const peso = data.weight / 10;
+        const altura = data.height / 10;
+        infoScreen.textContent = `Tipo: ${tipos} | Peso: ${peso} kg | Altura: ${altura} m`;
+        console.log(data);
         const urlImage = data.sprites.front_default;
         exibirSprite(urlImage);
     }
